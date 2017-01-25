@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>angular and ngrx</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #ff4646; }
+      .green { color: #2d882d; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        background: #e7e8e2;
+        border-radius: 5px;
+      }
+      .remark-code, .remark-inline-code {
+        font-family: 'Ubuntu Mono';
+        text-shadow: none;
+      }
+      /*.remark-code-line-highlighted     { background-color: #373832; }*/
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .white {
+        background: #fff;
+        color: #000;
+      }
+      .inverse {
+        background: #272822;
+        color: #cdcdcd;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layout */
+      .left-column {
+        width: 40%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 60%;
+        float: right;
+      }
+
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+      layout: true
+      class: inverse
+
+      ---
+
+      class: center, middle
+      # Angular with ngrx
+
+      Noel Klein
+
+      ???
+      You heard of this redux stuff and ngrx, but when should I use it?
+      ---
+
+      ## State is everywhere!
+
+      ### Types of state:
+      - Business state
+      - Application state
+
+      ### Places of state:
+      - Variables
+      - URLs
+      - Form input
+      - ...
+
+      ### Sources of state:
+      - User actions
+      - Backend systems
+      - Environment
+      - ...
+
+      ---
+
+      ## Step 1: State in components
+
+      .left-column[
+      Each component has it's own state.
+      ]
+
+      .right-column[
+      - **.green[Easy]**
+
+      - **.green[As seen on angular.io/docs]**
+
+
+      - .red[No component interaction]
+
+      - .red[Mostly simple apps]
+      ]
+
+      ???
+      This is what we start out with when starting with Angular
+
+      => show product-list.component.ts
+
+      => state is manipulated inside the component
+
+      Small or simple programs sometimes have very little state
+      An application build with Angular usually has many components
+
+      ---
+
+      layout: false
+      class: white, center, middle
+
+      ![architecture diagram](./step1.png)
+
+      ---
+
+      class: inverse
+
+      ## Step 2: Move state to higher level components
+
+      .left-column[
+      Bind data down.
+
+      Emit changes up.
+
+      States moves up to components that span all other components where that state is needed.
+
+      You might end up with all state in the top level component.
+      ]
+
+      .right-column[
+      - **.green[As seen on angular.io/docs]**
+
+      - **.green[Change detection works well at moderate scale]**
+
+      - **.green["OnPush" performance]**
+
+
+      - .red[Finding state "owner" becomes difficult]
+
+      - .red[Does not scale when application grows]
+
+      - .red[We loose modularity]
+
+      - .red[Tightly coupled components]
+      ]
+
+      ???
+      Does not scale:
+
+      large tree of components passing state through
+
+      We loose modularity:
+
+      Root level component knows about lower level components
+
+      ---
+
+      layout: false
+      class: white, center, middle
+
+      ![architecture diagram](./step2.png)
+      ---
+
+      class: inverse
+
+      ## Step 3: State in services
+
+      .left-column[
+      Smart components get state from services.
+
+      Same service can be injected in multiple components.
+      ]
+
+      .right-column[
+      - **.green[Modular]**
+
+      - **.green[Scalable (for a while)]**
+
+      - .red[Relies on change detection]
+
+      - .red[No "OnPush" performance]
+
+      - .red[Business logic appears in "NgOnChanges" event handlers]
+      ]
+
+      ???
+
+      You can bind to values in services.
+
+      Change detection will keep UI up to date.
+
+      ---
+
+      layout: false
+      class: white, center, middle
+
+      ![architecture diagram](./step3.png)
+
+      ---
+
+      class: inverse
+
+      ## Step 4: State in observables
+
+      .left-column[
+      Well established observer pattern via RxJS observables.
+
+      You subscribe to state in your services.
+
+      Async pipe was made with RxJS in mind.
+      ]
+
+      .right-column[
+      - **.green[Modular]**
+
+      - **.green[Scalable]**
+
+      - **.green["OnPush" performance]**
+
+
+      - .red[AdHoc solution inventions]
+
+      - .red[Custom complex state management]
+
+      - .red[Additional learning curve for new developers]
+
+      - .red[Alienate from community]
+      ]
+
+      ---
+
+      layout: false
+      class: white, center, middle
+
+      No diagram for custom state management using observables :(
+
+      ???
+      Every developer comes up with different solution
+
+      ---
+
+      class: inverse
+
+      ## Step 5: Use existing state management library
+
+      .left-column[
+      Reinventing the wheel is difficult and expensive.
+
+      Usually better to adopt an existing framework.
+
+      Let others do the work of testing and maintaining state management.
+      ]
+
+      .right-column[
+      - **.green[Modular]**
+
+      - **.green[Scalable]**
+
+      - **.green["OnPush" performance]**
+
+      - **.green[Less framework code]**
+
+      - **.green[Community support]**
+
+      - **.green[Learning material already exists]**
+
+      - **.green[Well tested library]**
+
+
+      - **.red[One more thing to learn]**
+      ]
+
+      ???
+      Ideally you concentrate on developing features with business value.
+
+      Benefits are greater than downsides.
+
+      ---
+
+      layout: false
+      class: white, center, middle
+
+      ![architecture diagram](./step5.png)
+
+      ---
+
+      class: inverse
+
+      ## When to use state management library?
+
+      You're working on a large scale application?
+      So you need...
+      - Types
+
+      - Componentization
+
+      - Modularization
+
+      - Dependency injection
+
+      - Lazy loading
+
+      You probably need a state management library!
+
+      ---
+
+      class: inverse
+
+      ## Flux
+
+      - Application architecture for state management
+
+      - Invented at Facebook
+
+      - Intended for React
+
+      - It's a pattern, not a JavaScript library!
+
+      - Flux war for implementations
+
+      - Redux wins
+
+      ---
+
+      layout: false
+      class: white, center, middle
+
+      ![architecture diagram](./flux.png)
+
+      source: https://facebook.github.io/flux/docs/in-depth-overview.html
+
+      ---
+
+      class: inverse
+
+      ## @ngrx/store
+
+      - Created by Angular core team members
+
+      - Utilizes RxJS observables
+
+      - Build on redux concepts
+
+      - One single application store
+
+      - Project data from store using selectors
+
+      - Increases performance by minimizing change detection
+
+      - Increase testability
+
+      ???
+
+      Rob Wormald
+
+      Mike Ryan (maintainer of ngrx)
+
+      Dan Abramov (creator of redux)
+
+      ---
+
+      layout: false
+      class: white, center, middle
+
+      ![architecture diagram](./ngrx.png)
+
+      ---
+
+      layout: true
+      class: inverse
+
+      ---
+
+      ## Store
+
+      - Single source of truth
+
+      - Read access to state via observables
+      ```typescript
+      store.select(cart => cart.items)
+      ```
+
+      - State is read only
+
+      - Write access to state via actions
+      ```typescript
+      store.dispatch(new Action(payload));
+      ```
+
+      ---
+
+      ## Action
+
+      - Type
+
+      - Payload
+
+      ```typescript
+      class AddProductAction {
+        public type = CartActionType.AddProductToCard;
+        constructor(public payload: Product) { };
+      }
+      ```
+
+      ---
+
+      ## Reducer
+
+      - Triggered by actions
+      ```typescript
+      store.dispatch(new Action(payload));
+      ```
+
+      - Pure function
+      ```typescript
+      (currentState, action) => newState
+      ```
+
+      - Stateless
+
+      - Easy to understand
+
+      - Input defines output
+
+      - No side effects
+
+      - Each reducer operates on subset of state in store
+
+      - Easy to test
+
+      ---
+
+      class: center, middle
+
+      ## code :)
+
+      ???
+      1. createStore
+      2. initial state
+      3. injecting store into components
+      4. async pipe: subscribes to observables and unsubscribes when view is destroyed
+      5. change detection strategy: OnPush
+      6. triggering actions from view
+      7. handling actions in reducers
+      8. action that triggers side effect
+      9. smart + dumb components
+
+      ---
+
+      # Links
+
+      [Introduction to ngrx](https://gist.github.com/btroncone/a6e4347326749f938510)
+
+      [ngrx with Mike Ryan](https://www.youtube.com/watch?v=Rw9ZQW2z0M8)
+
+      [Managing State by Kyle Cordes](https://www.youtube.com/watch?v=eBLTz8QRg4Q)
+
+      ???
+
+      Dev tools
+
+      Time travelleling
+
+      immutable.js
+
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
