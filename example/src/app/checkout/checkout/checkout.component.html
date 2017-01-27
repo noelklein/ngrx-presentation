@@ -1,0 +1,106 @@
+<div class="col-md-9 col-md-offset-1">
+	<form (ngSubmit)="checkout()" #orderForm="ngForm">
+		<div class="panel panel-default">
+			<div class="panel-heading">Customer Information</div>
+			<div class="panel-body">
+				<div class="form-horizontal" role="form">
+					<div class="form-group">
+						<label for="email" class="col-sm-2 control-label">Email</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="email" placeholder="Email" name="email" [(ngModel)]="order.customer.Email" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="firstname" class="col-sm-2 control-label">First Name</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="firstname" placeholder="First Name" name="firstname" [(ngModel)]="order.customer.FirstName">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="lastname" class="col-sm-2 control-label">Last Name</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="lastname" placeholder="Last Name" name="lastname" [(ngModel)]="order.customer.LastName">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="phonenumber" class="col-sm-2 control-label">Phone Number</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="phonenumber" placeholder="Phone Number" name="phonenumber" [(ngModel)]="order.customer.PhoneNumber">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">Address Information</div>
+			<div class="panel-body">
+				<div class="col-lg-6">
+					Billing Address
+					<hr />
+					<div class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="line1" class="col-sm-2 control-label">Line 1:</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="line1" placeholder="Address line 1" name="billingAddress.AddressLine1" [(ngModel)]="order.billingAddress.AddressLine1">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="line2" class="col-sm-2 control-label">Line 2:</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="line2" placeholder="Address line 2" name="billingAddress.AddressLine2" [(ngModel)]="order.billingAddress.AddressLine2">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="city" class="col-sm-2 control-label">City:</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" id="city" placeholder="City" name="billingAddress.City" [(ngModel)]="order.billingAddress.City">
+							</div>
+							<label for="state" class="col-sm-2 control-label">State:</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" id="state" placeholder="State" name="billingAddress.State" [(ngModel)]="order.billingAddress.State">
+							</div>
+							<label for="zip" class="col-sm-2 control-label">Zip:</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" id="zip" placeholder="Zip" name="billingAddress.PostalCode" [(ngModel)]="order.billingAddress.PostalCode">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					Shipping Address
+					<hr />
+					<div class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="line1" class="col-sm-2 control-label">Line 1:</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="line1" placeholder="Address line 1" name="shippingAddress.AddressLine1" [(ngModel)]="order.shippingAddress.AddressLine1">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="line2" class="col-sm-2 control-label">Line 2:</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="line2" placeholder="Address line 2" name="shippingAddress.AddressLine2" [(ngModel)]="order.shippingAddress.AddressLine2">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="city" class="col-sm-2 control-label">City:</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" id="city" placeholder="City" name="shippingAddress.City" [(ngModel)]="order.shippingAddress.City">
+							</div>
+							<label for="state" class="col-sm-2 control-label">State:</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" id="state" placeholder="State" name="shippingAddress.State" [(ngModel)]="order.shippingAddress.State">
+							</div>
+							<label for="zip" class="col-sm-2 control-label">Zip:</label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" id="zip" placeholder="Zip" name="shippingAddress.PostalCode" [(ngModel)]="order.shippingAddress.PostalCode">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<a routerLink="/shopping/cart" class="pointer btn btn-danger">Back</a>
+		<button type="submit" class="pointer btn btn-success pull-right" [disabled]="orderIsProcessing">Place Order</button>
+	</form>
+</div>

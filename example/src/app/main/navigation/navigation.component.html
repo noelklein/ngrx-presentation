@@ -1,0 +1,38 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<a routerLink="/" class="navbar-brand">
+				Angular2 E-Commerce
+				<span class="glyphicon glyphicon-registration-mark"></span>
+      </a>
+			<button type="button" class="navbar-toggle collapsed">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li role="presentation" class="active">
+					<a action="push" routerLink="/">Home</a>
+				</li>
+				<li role="presentation" *secIfAuthorized="['logout']">
+          <a>{{email | async}} <span (click)="logout()">(logout)</span></a>
+				</li>
+				<li role="presentation" *secIfAuthorized="['login']">
+          <a (click)="login()">Login</a>
+				</li>
+				<li role="presentation" *ngIf="hasItemsInCart | async">
+					<a action="push" routerLink="/shopping/cart">
+						<span class="glyphicon glyphicon-shopping-cart"></span>
+            <span>{{numberOfItemsInCart | async}} Items / {{totalPriceOfCart | async | currency:'USD':true}} total</span>
+					</a>
+				</li>
+				<li role="presentation" *secIfAuthorized="['checkout']">
+					<a routerLink="/checkout">Checkout</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>

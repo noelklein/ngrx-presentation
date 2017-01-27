@@ -1,0 +1,12 @@
+<div class="media-object thumbnail text-center">
+	<a routerLink="/shopping/product/{{product.productId}}">
+		<h4>{{product.name | limitChars:25}}</h4>
+		<img src="assets/images/{{product.productId | padLeft:'0000'}}.jpg">
+	</a>
+	<h4>{{product.price | currency:'USD':true}}</h4>
+	<div class="bottom-align">
+		<button type="button" class="btn btn-info" (click)="addToCart()">
+      <span class="glyphicon glyphicon-shopping-cart"></span>
+    </button>
+	</div>
+</div>

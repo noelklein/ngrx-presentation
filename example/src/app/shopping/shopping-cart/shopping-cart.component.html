@@ -1,0 +1,64 @@
+<div class="col-md-10 col-md-offset-1">
+	<div class="panel panel-default">
+		<div class="panel-heading">Shopping Cart</div>
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th class="text-left">Product</th>
+					<th>Description</th>
+					<th>Price</th>
+					<th class="text-center">Quantity</th>
+					<th class="text-center">Subtotal</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let item of items | async">
+					<td><img src="/assets/images/{{item.product.productId | padLeft:'0000'}}.jpg"></td>
+					<td>
+						<h4>{{item.product.description | limitChars:50}}</h4>
+					</td>
+					<td>
+						{{item.product.price | currency:'USD':true}}
+					</td>
+					<td class="text-center">
+						<span class="input-group" style="width: 150px;">
+              <span class="input-group-btn">
+                <button (click)="decrementQuantity(item)" type="button" class="btn btn-info"><span class="glyphicon glyphicon-minus"></span></button>
+						</span>
+						<input [value]="item.qty" type="text" class="text-center form-control">
+						<span class="input-group-btn">
+                <button (click)="incrementQuantity(item)" type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span></button>
+						</span>
+						</span>
+					</td>
+					<td class="text-center">
+						{{item.totalAmount | currency:'USD':true}}
+					</td>
+					<td>
+						<button (click)="removeItem(item)" type="button" class="btn btn-sm btn-danger">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>
+						<a class="btn btn-primary" routerLink="/">
+							<span class="glyphicon glyphicon-chevron-left"></span> Continue Shopping
+						</a>
+					</td>
+					<td colspan="3"></td>
+					<td class="text-center"><strong>Total: {{(totalAmount | async) | currency:'USD':true}}</strong></td>
+					<td>
+						<a class="btn btn-success" routerLink="/checkout" *secIfAuthorized="['checkout']">
+							Checkout
+							<span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>

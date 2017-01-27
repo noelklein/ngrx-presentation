@@ -1,0 +1,32 @@
+<div class="col-md-3">
+	<div class="sidebar-nav-fixed">
+		<h3 class="text-center">Categories</h3>
+		<ul class="list-group checked-list-box">
+			<li class="list-group-item" *ngFor="let category of categories">
+				<div class="checkbox">
+					<label>
+            <input
+              type="checkbox"
+              [checked]="category.selected"
+              (change)="filterByCategory(category, $event)">
+                {{category.name}}
+          </label>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="col-md-9">
+	<ul class="row">
+		<li class="media-object col-md-4" *ngFor="let product of products">
+			<sec-product-thumbnail [product]="product"></sec-product-thumbnail>
+		</li>
+	</ul>
+	<div class="text-center">
+		<ul class="pagination pagination-md">
+			<li [class.active]="currentPage === pageNumber" *ngFor="let pageNumber of pageNumbers">
+				<a role="button" [routerLink]="['/shopping/products', {page: pageNumber}]">{{pageNumber}}</a>
+			</li>
+		</ul>
+	</div>
+</div>

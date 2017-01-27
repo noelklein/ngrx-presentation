@@ -1,0 +1,21 @@
+<div class="content-wrapper">
+	<div class="item-container">
+		<div class="container">
+			<div class="col-md-12">
+				<div class="col-md-3">
+					<img src="assets/images/{{product.productId | padLeft:'0000'}}.jpg" class="item-display">
+				</div>
+			</div>
+			<div class="col-md-9">
+				<h4>{{product.name}}</h4>
+				<div>{{product.description}}</div>
+				<hr>
+				<div>{{product.price | currency:'USD':true}}</div>
+				<hr>
+				<button type="button" class="btn btn-info">
+          <span>Add to cart</span>
+        </button>
+			</div>
+		</div>
+	</div>
+</div>
